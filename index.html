@@ -1,0 +1,249 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Crush ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden; /* Prevent scrolling when button moves */
+            touch-action: none; /* Prevent swipe-to-scroll on mobile */
+        }
+        
+        .title-font {
+            font-family: 'Pacifico', cursive;
+        }
+
+        /* Floating Hearts Background Animation */
+        .heart-bg {
+            position: absolute;
+            bottom: -10%;
+            animation: floatUp linear infinite;
+            opacity: 0.6;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-120vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Pulse animation for the Yes button */
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-gentle {
+            animation: gentlePulse 2s infinite;
+        }
+
+        /* Confetti pop animation */
+        .celebration-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: popOut 1.5s ease-out forwards;
+        }
+
+        @keyframes popOut {
+            0% { transform: scale(0) translate(0, 0); opacity: 1; }
+            100% { 
+                transform: scale(2) translate(var(--tx), var(--ty)); 
+                opacity: 0; 
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-200 via-pink-100 to-white min-h-screen flex items-center justify-center relative">
+
+    <!-- Ambient Floating Hearts -->
+    <div id="ambient-hearts" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <!-- Main Proposal View -->
+    <div id="proposal-view" class="relative z-10 flex flex-col items-center justify-center p-6 text-center max-w-md w-full">
+        
+        <!-- Cute GIF / Image placeholder (Using a cute emoji as graphic) -->
+        <div class="text-8xl mb-6 drop-shadow-lg animate-bounce">
+            🥺
+        </div>
+
+        <h1 class="title-font text-4xl md:text-5xl text-pink-600 mb-4 leading-tight drop-shadow-sm">
+            I have a crush on you.
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-700 mb-10 font-bold">
+            Will you be mine? 💖
+        </p>
+
+        <div class="flex flex-row items-center justify-center gap-6 md:gap-10 w-full relative h-20">
+            <!-- YES Button -->
+            <button id="yesBtn" class="bg-green-400 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-full shadow-[0_4px_14px_0_rgba(74,222,128,0.5)] transition-all animate-pulse-gentle text-xl">
+                Yes! 🥰
+            </button>
+            
+            <!-- NO Button (The trick one) -->
+            <button id="noBtn" class="bg-red-400 text-white font-bold py-3 px-8 rounded-full shadow-[0_4px_14px_0_rgba(248,113,113,0.5)] text-xl absolute">
+                No 😢
+            </button>
+        </div>
+    </div>
+
+    <!-- Celebration View (Hidden initially) -->
+    <div id="celebration-view" class="hidden relative z-10 flex-col items-center justify-center p-6 text-center w-full h-full">
+        <div class="text-8xl mb-4 drop-shadow-xl animate-pulse">
+            🥰💖✨
+        </div>
+        <h1 class="title-font text-4xl md:text-6xl text-pink-600 mb-4 drop-shadow-md">
+            Yay! 🎉
+        </h1>
+        <p class="text-2xl md:text-3xl text-gray-800 font-bold max-w-lg mx-auto">
+            You just made me the happiest person! ❤️
+        </p>
+    </div>
+
+    <script>
+        // DOM Elements
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const proposalView = document.getElementById('proposal-view');
+        const celebrationView = document.getElementById('celebration-view');
+        const ambientHeartsContainer = document.getElementById('ambient-hearts');
+
+        // Initial setup for the No button to position it correctly next to Yes initially
+        window.addEventListener('DOMContentLoaded', () => {
+            // Give a slight delay to let layout settle, then set initial fixed pos if needed,
+            // but absolute within the relative flex container works best initially.
+            noBtn.style.position = 'relative';
+            
+            createAmbientHearts();
+        });
+
+        // The Dodge Logic for the 'No' button
+        function dodgeButton() {
+            // Change position to fixed so it can move anywhere on screen
+            noBtn.style.position = 'fixed';
+            
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            
+            // Calculate safe bounds to keep button fully visible
+            const maxX = window.innerWidth - btnWidth - 20; // 20px padding
+            const maxY = window.innerHeight - btnHeight - 20;
+            
+            // Generate random coordinates
+            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+            
+            // Apply new position with smooth transition
+            noBtn.style.transition = 'all 0.2s ease';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        }
+
+        // Add event listeners for dodging
+        noBtn.addEventListener('mouseover', dodgeButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent accidental taps
+            dodgeButton();
+        });
+        // Just in case they somehow manage to click it
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            dodgeButton();
+        });
+
+        // The Success Logic for the 'Yes' button
+        yesBtn.addEventListener('click', () => {
+            proposalView.classList.add('hidden');
+            celebrationView.classList.remove('hidden');
+            celebrationView.classList.add('flex');
+            
+            // Trigger massive celebration effects
+            triggerCelebration();
+        });
+
+        // Helper: Create background floating hearts
+        function createAmbientHearts() {
+            const hearts = ['💖', '💕', '💗', '💓', '🤍'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-bg text-2xl absolute';
+                    heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = `${Math.random() * 100}vw`;
+                    heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                    ambientHeartsContainer.appendChild(heart);
+                    
+                    // Remove and recreate to loop endlessly without DOM bloat
+                    heart.addEventListener('animationend', () => {
+                        heart.remove();
+                        createSingleHeart();
+                    });
+                }, i * 300);
+            }
+        }
+
+        function createSingleHeart() {
+            const hearts = ['💖', '💕', '💗', '💓', '🤍'];
+            const heart = document.createElement('div');
+            heart.className = 'heart-bg text-2xl absolute';
+            heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            ambientHeartsContainer.appendChild(heart);
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+                createSingleHeart();
+            });
+        }
+
+        // Helper: Trigger massive explosion of emojis
+        function triggerCelebration() {
+            const emojis = ['🥰', '💖', '🎉', '😍', '✨', '❤️'];
+            const burstCount = 80;
+
+            for (let i = 0; i < burstCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'celebration-heart text-3xl';
+                particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Start from center
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                
+                // Random translation distances
+                const tx = (Math.random() - 0.5) * 500;
+                const ty = (Math.random() - 0.5) * 500;
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                
+                document.body.appendChild(particle);
+
+                // Clean up after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1500);
+            }
+            
+            // Speed up ambient hearts
+            document.querySelectorAll('.heart-bg').forEach(h => {
+                h.style.animationDuration = '2s';
+            });
+        }
+    </script>
+</body>
+</html>
+```
