@@ -1,247 +1,338 @@
 ```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Crush ❤️</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&family=Pacifico&display=swap" rel="stylesheet">
+    <title>SGS BHOJPUR - Online Test</title>
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            overflow: hidden; /* Prevent scrolling when button moves */
-            touch-action: none; /* Prevent swipe-to-scroll on mobile */
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: #f1f5f9; color: #1e293b; min-height: 100vh; padding: 12px; }
+        .header { background: #1e3a8a; color: white; padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 14px; }
+        .header h1 { font-size: 1.25rem; font-weight: 800; }
+        .header p { font-size: 0.85rem; opacity: 0.9; margin-top: 4px; }
+        .card { background: white; border-radius: 14px; padding: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); max-width: 500px; margin: 0 auto; }
         
-        .title-font {
-            font-family: 'Pacifico', cursive;
-        }
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.9rem; }
+        .input-field { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
+        
+        .btn-subject, .btn-chapter { width: 100%; display: block; padding: 15px; margin-bottom: 12px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; color: white; cursor: pointer; text-align: center; transition: 0.2s; }
+        .btn-phy { background: #2563eb; }
+        .btn-eng { background: #059669; }
+        .btn-math { background: #7c3aed; }
+        .btn-chem { background: #d97706; }
+        .btn-hindi { background: #be123c; }
+        .btn-subject:active, .btn-chapter:active { opacity: 0.85; transform: scale(0.98); }
+        
+        .btn-chapter { background: #f8fafc; color: #1e293b; border: 2px solid #cbd5e1; text-align: left; padding: 12px; font-weight: 600; font-size: 0.95rem; }
+        .btn-chapter:hover { background: #e2e8f0; }
+        
+        .back-btn { background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 15px; display: inline-block; }
 
-        /* Floating Hearts Background Animation */
-        .heart-bg {
-            position: absolute;
-            bottom: -10%;
-            animation: floatUp linear infinite;
-            opacity: 0.6;
-            z-index: -1;
-            pointer-events: none;
-        }
+        .quiz-top { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 12px; font-size: 0.95rem; }
+        .p-bar-bg { width: 100%; height: 6px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin-bottom: 14px; }
+        .p-bar { height: 100%; background: #2563eb; width: 0%; transition: width 0.3s ease; }
+        .q-text { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin-bottom: 16px; }
+        .opt-btn { width: 100%; display: block; padding: 12px 14px; background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; font-weight: 600; margin-bottom: 10px; text-align: left; cursor: pointer; color: #1e293b; transition: all 0.2s; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        .opt-btn.correct { background: #dcfce7 !important; border-color: #16a34a !important; color: #166534 !important; }
+        .opt-btn.wrong { background: #fee2e2 !important; border-color: #dc2626 !important; color: #991b1b !important; }
+        
+        .score-box { background: white; border: 3px solid #2563eb; border-radius: 14px; padding: 20px; text-align: center; max-width: 500px; margin: 0 auto; }
+        .score-val { font-size: 2.2rem; font-weight: 800; color: #2563eb; margin: 12px 0; }
+        .details-box { background: #f8fafc; border-radius: 8px; padding: 12px; text-align: left; font-size: 0.95rem; line-height: 1.8; margin-bottom: 14px; }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) scale(0.5) rotate(0deg);
-                opacity: 0;
-            }
-            20% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-120vh) scale(1.5) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Pulse animation for the Yes button */
-        @keyframes gentlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .animate-pulse-gentle {
-            animation: gentlePulse 2s infinite;
-        }
-
-        /* Confetti pop animation */
-        .celebration-heart {
-            position: absolute;
-            pointer-events: none;
-            animation: popOut 1.5s ease-out forwards;
-        }
-
-        @keyframes popOut {
-            0% { transform: scale(0) translate(0, 0); opacity: 1; }
-            100% { 
-                transform: scale(2) translate(var(--tx), var(--ty)); 
-                opacity: 0; 
-            }
-        }
+        /* Custom Alert Styles */
+        #customAlertOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        #customAlertBox { background: white; padding: 24px; border-radius: 12px; text-align: center; max-width: 400px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        #customAlertMessage { margin-bottom: 20px; font-size: 1.05rem; font-weight: 600; color: #1e293b; }
+        #customAlertBtn { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-200 via-pink-100 to-white min-h-screen flex items-center justify-center relative">
+<body>
 
-    <!-- Ambient Floating Hearts -->
-    <div id="ambient-hearts" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
-
-    <!-- Main Proposal View -->
-    <div id="proposal-view" class="relative z-10 flex flex-col items-center justify-center p-6 text-center max-w-md w-full">
-        
-        <!-- Cute GIF / Image placeholder (Using a cute emoji as graphic) -->
-        <div class="text-8xl mb-6 drop-shadow-lg animate-bounce">
-            🥺
-        </div>
-
-        <h1 class="title-font text-4xl md:text-5xl text-pink-600 mb-4 leading-tight drop-shadow-sm">
-            I have a crush on you.
-        </h1>
-        <p class="text-xl md:text-2xl text-gray-700 mb-10 font-bold">
-            Will you be mine? 💖
-        </p>
-
-        <div class="flex flex-row items-center justify-center gap-6 md:gap-10 w-full relative h-20">
-            <!-- YES Button -->
-            <button id="yesBtn" class="bg-green-400 hover:bg-green-500 text-white font-bold py-3 px-8 rounded-full shadow-[0_4px_14px_0_rgba(74,222,128,0.5)] transition-all animate-pulse-gentle text-xl">
-                Yes! 🥰
-            </button>
-            
-            <!-- NO Button (The trick one) -->
-            <button id="noBtn" class="bg-red-400 text-white font-bold py-3 px-8 rounded-full shadow-[0_4px_14px_0_rgba(248,113,113,0.5)] text-xl absolute">
-                No 😢
-            </button>
-        </div>
+    <div class="header">
+        <h1>SGS BHOJPUR, DUMRAON</h1>
+        <p>Best Institute of Science • Mr. Sonu Sir</p>
     </div>
 
-    <!-- Celebration View (Hidden initially) -->
-    <div id="celebration-view" class="hidden relative z-10 flex-col items-center justify-center p-6 text-center w-full h-full">
-        <div class="text-8xl mb-4 drop-shadow-xl animate-pulse">
-            🥰💖✨
+    <!-- 1. LOGIN & SUBJECT SELECTION SCREEN -->
+    <div id="screenLogin" class="card">
+        <div class="input-group">
+            <label>विद्यार्थी का नाम (Student Name):</label>
+            <input type="text" id="txtName" class="input-field" placeholder="उदा. Rahul Kumar">
         </div>
-        <h1 class="title-font text-4xl md:text-6xl text-pink-600 mb-4 drop-shadow-md">
-            Yay! 🎉
-        </h1>
-        <p class="text-2xl md:text-3xl text-gray-800 font-bold max-w-lg mx-auto">
-            You just made me the happiest person! ❤️
-        </p>
+        <p style="font-weight: bold; margin-bottom: 12px; color: #64748b; font-size: 0.85rem;">नीचे विषय पर टच करके चैप्टर चुनें:</p>
+        
+        <button type="button" class="btn-subject btn-phy" onclick="showChapters('physics')">1. भौतिकी (Physics)</button>
+        <button type="button" class="btn-subject btn-chem" onclick="showChapters('chemistry')">2. रसायन विज्ञान (Chemistry)</button>
+        <button type="button" class="btn-subject btn-math" onclick="showChapters('math')">3. गणित (Mathematics)</button>
+        <button type="button" class="btn-subject btn-hindi" onclick="showChapters('hindi')">4. हिन्दी (Hindi 100 Marks)</button>
+        <button type="button" class="btn-subject btn-eng" onclick="showChapters('english')">5. English (100 Marks)</button>
+    </div>
+
+    <!-- 2. CHAPTER SELECTION SCREEN -->
+    <div id="screenChapters" class="card" style="display: none;">
+        <button class="back-btn" onclick="goBackToSubjects()">← वापस जाएँ</button>
+        <h3 id="chapterScreenTitle" style="margin-bottom: 15px; color: #1e3a8a;"></h3>
+        <p style="font-weight: bold; margin-bottom: 12px; color: #64748b; font-size: 0.85rem;">टेस्ट देने के लिए चैप्टर पर क्लिक करें:</p>
+        <div id="chapterList"></div>
+    </div>
+
+    <!-- 3. QUIZ SCREEN -->
+    <div id="screenQuiz" class="card" style="display: none;">
+        <div class="quiz-top">
+            <span id="txtQIndex">प्रश्न: 1 / 50</span>
+            <span id="txtTimer" style="color: #dc2626;">50:00</span>
+        </div>
+        <div class="p-bar-bg">
+            <div id="barProgress" class="p-bar"></div>
+        </div>
+        <h4 id="quizChapterTitle" style="color: #1e3a8a; margin-bottom: 10px; font-size: 0.9rem;"></h4>
+        <div id="txtQuestion" class="q-text"></div>
+        <div id="boxOptions"></div>
+    </div>
+
+    <!-- 4. RESULT SCREEN -->
+    <div id="screenResult" class="score-box" style="display: none;">
+        <h3 style="color: #1e3a8a;">SGS BHOJPUR, DUMRAON</h3>
+        <p style="font-size: 0.8rem; color: #64748b; font-weight: bold;">OFFICIAL SCORE CARD</p>
+        <div class="score-val" id="txtScore">0 / 50</div>
+        <div class="details-box">
+            <div><strong>नाम:</strong> <span id="resName"></span></div>
+            <div><strong>विषय:</strong> <span id="resSubject"></span></div>
+            <div><strong>चैप्टर:</strong> <span id="resChapter"></span></div>
+            <div><strong>तारीख:</strong> <span id="resDate"></span></div>
+            <div><strong>प्राप्तांक:</strong> <span id="resPercent"></span>%</div>
+        </div>
+        <p style="color: #059669; font-weight: bold; margin-bottom: 10px;">📸 इसका स्क्रीनशॉट लेकर सर को भेजें।</p>
+        <button type="button" class="btn-subject btn-phy" onclick="location.reload()">होम पेज पर जाएँ</button>
+    </div>
+
+    <!-- Custom Alert Overlay -->
+    <div id="customAlertOverlay">
+        <div id="customAlertBox">
+            <div id="customAlertMessage"></div>
+            <button id="customAlertBtn" onclick="closeCustomAlert()">OK</button>
+        </div>
     </div>
 
     <script>
-        // DOM Elements
-        const yesBtn = document.getElementById('yesBtn');
-        const noBtn = document.getElementById('noBtn');
-        const proposalView = document.getElementById('proposal-view');
-        const celebrationView = document.getElementById('celebration-view');
-        const ambientHeartsContainer = document.getElementById('ambient-hearts');
-
-        // Initial setup for the No button to position it correctly next to Yes initially
-        window.addEventListener('DOMContentLoaded', () => {
-            // Give a slight delay to let layout settle, then set initial fixed pos if needed,
-            // but absolute within the relative flex container works best initially.
-            noBtn.style.position = 'relative';
-            
-            createAmbientHearts();
-        });
-
-        // The Dodge Logic for the 'No' button
-        function dodgeButton() {
-            // Change position to fixed so it can move anywhere on screen
-            noBtn.style.position = 'fixed';
-            
-            const btnWidth = noBtn.offsetWidth;
-            const btnHeight = noBtn.offsetHeight;
-            
-            // Calculate safe bounds to keep button fully visible
-            const maxX = window.innerWidth - btnWidth - 20; // 20px padding
-            const maxY = window.innerHeight - btnHeight - 20;
-            
-            // Generate random coordinates
-            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
-            
-            // Apply new position with smooth transition
-            noBtn.style.transition = 'all 0.2s ease';
-            noBtn.style.left = `${randomX}px`;
-            noBtn.style.top = `${randomY}px`;
+        // Custom Alert Function (Replaces native alert)
+        function customAlert(message) {
+            document.getElementById("customAlertMessage").innerText = message;
+            document.getElementById("customAlertOverlay").style.display = "flex";
         }
 
-        // Add event listeners for dodging
-        noBtn.addEventListener('mouseover', dodgeButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevent accidental taps
-            dodgeButton();
-        });
-        // Just in case they somehow manage to click it
-        noBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            dodgeButton();
-        });
+        function closeCustomAlert() {
+            document.getElementById("customAlertOverlay").style.display = "none";
+        }
 
-        // The Success Logic for the 'Yes' button
-        yesBtn.addEventListener('click', () => {
-            proposalView.classList.add('hidden');
-            celebrationView.classList.remove('hidden');
-            celebrationView.classList.add('flex');
-            
-            // Trigger massive celebration effects
-            triggerCelebration();
-        });
-
-        // Helper: Create background floating hearts
-        function createAmbientHearts() {
-            const hearts = ['💖', '💕', '💗', '💓', '🤍'];
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'heart-bg text-2xl absolute';
-                    heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
-                    heart.style.left = `${Math.random() * 100}vw`;
-                    heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
-                    ambientHeartsContainer.appendChild(heart);
-                    
-                    // Remove and recreate to loop endlessly without DOM bloat
-                    heart.addEventListener('animationend', () => {
-                        heart.remove();
-                        createSingleHeart();
-                    });
-                }, i * 300);
+        var syllabusData = {
+            physics: {
+                title: "भौतिकी (Physics)",
+                chapters: [
+                    { name: "1. वैद्युत आवेश तथा क्षेत्र", questions: [ {q:"विद्युत धारा का SI मात्रक है", o:["वोल्ट", "कूलॉम", "ओम", "एम्पियर"], a:3}, {q:"विद्युत धारा एक राशि है", o:["ध्रुवीय सदिश", "टेन्सर", "अदिश", "सदिश"], a:2} ] },
+                    { name: "2. स्थिर वैद्युत विभव तथा धारिता", questions: [] },
+                    { name: "3. विद्युत धारा (Current Electricity)", questions: [ {q:"ओम के नियम में V/I नियतांक को कहते हैं", o:["प्रतिरोधकता", "प्रतिरोध", "चालकता", "धारिता"], a:1} ] },
+                    { name: "4. गतिमान आवेश और चुंबकत्व", questions: [] },
+                    { name: "5. चुंबकत्व एवं द्रव्य", questions: [] },
+                    { name: "6. वैद्युतचुंबकीय प्रेरण", questions: [] },
+                    { name: "7. प्रत्यावर्ती धारा", questions: [] },
+                    { name: "8. वैद्युतचुंबकीय तरंगें", questions: [] },
+                    { name: "9. किरण प्रकाशिकी एवं प्रकाशिक यंत्र", questions: [] }
+                ]
+            },
+            chemistry: {
+                title: "रसायन विज्ञान (Chemistry)",
+                chapters: [
+                    { name: "1. ठोस अवस्था (Solid State)", questions: [] },
+                    { name: "2. विलयन (Solutions)", questions: [] },
+                    { name: "3. वैद्युत रसायन (Electrochemistry)", questions: [ {q:"फैराडे का विद्युत अपघटन नियम निम्न में से किससे सम्बंधित है?", o:["धनायन के परमाणु भार से", "ऋणायन के परमाणु भार से", "इलेक्ट्रोलाइट के समतुल्य भार से", "इनमे से कोई नहीं"], a:2}, {q:"गैल्वेनिक सेल में एनोड होता है:", o:["ऋणात्मक इलेक्ट्रोड", "धनात्मक इलेक्ट्रोड", "उदासीन इलेक्ट्रोड", "कोई नहीं"], a:0} ] },
+                    { name: "4. रासायनिक बलगतिकी", questions: [] },
+                    { name: "5. पृष्ठ रसायन", questions: [] },
+                    { name: "6. तत्वों के निष्कर्षण के सिद्धांत एवं प्रक्रम", questions: [] },
+                    { name: "7. p-ब्लॉक के तत्व", questions: [] }
+                ]
+            },
+            math: {
+                title: "गणित (Mathematics)",
+                chapters: [
+                    { name: "1. संबंध एवं फलन", questions: [] },
+                    { name: "2. प्रतिलोम त्रिकोणमितीय फलन", questions: [] },
+                    { name: "3. आव्यूह (Matrices)", questions: [ {q:"|adj A| (2×2 आव्यूह) =", o:["2|A|", "|A|", "|A|^2", "|A|^3"], a:1}, {q:"[1 2] × [[1],[2]] =", o:["[5]", "[[5,0],[0,5]]", "[14]", "कोई नहीं"], a:0} ] },
+                    { name: "4. सारणिक (Determinants)", questions: [] },
+                    { name: "5. सांतत्य तथा अवकलनीयता", questions: [] },
+                    { name: "6. अवकलज के अनुप्रयोग", questions: [] },
+                    { name: "7. समाकलन (Integrals)", questions: [] }
+                ]
+            },
+            hindi: {
+                title: "हिन्दी (Hindi 100 Marks)",
+                chapters: [
+                    { name: "1. बातचीत (बालकृष्ण भट्ट)", questions: [ {q:"'बातचीत' शीर्षक निबंध के निबंधकार कौन हैं?", o:["जयप्रकाश नारायण", "मोहन राकेश", "नामवर सिंह", "बालकृष्ण भट्ट"], a:3} ] },
+                    { name: "2. उसने कहा था (चंद्रधर शर्मा गुलेरी)", questions: [] },
+                    { name: "3. संपूर्ण क्रांति (जयप्रकाश नारायण)", questions: [] },
+                    { name: "4. अर्धनारीश्वर (रामधारी सिंह दिनकर)", questions: [] },
+                    { name: "5. रोज़ (अज्ञेय)", questions: [] },
+                    { name: "6. एक लेख और एक पत्र", questions: [] },
+                    { name: "7. ओ सदानीरा", questions: [] },
+                    { name: "8. सिपाही की माँ", questions: [] }
+                ]
+            },
+            english: {
+                title: "English (100 Marks)",
+                chapters: [
+                    { name: "1. Indian Civilization and Culture", questions: [] },
+                    { name: "2. Bharat is My Home", questions: [] },
+                    { name: "3. A Pinch of Snuff", questions: [ {q:"'A Pinch of Snuff' was written by", o:["Ruskin Bond", "Manohar Malgonkar", "R. K. Narayan", "Khushwant Singh"], a:1}, {q:"Nanukaka is the narrator's", o:["paternal uncle", "brother", "maternal uncle", "grandfather"], a:2} ] },
+                    { name: "4. I Have a Dream", questions: [] },
+                    { name: "5. Ideas That Have Helped Mankind", questions: [] },
+                    { name: "6. The Artist", questions: [] },
+                    { name: "7. A Child is Born", questions: [] }
+                ]
             }
-        }
+        };
 
-        function createSingleHeart() {
-            const hearts = ['💖', '💕', '💗', '💓', '🤍'];
-            const heart = document.createElement('div');
-            heart.className = 'heart-bg text-2xl absolute';
-            heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
-            heart.style.left = `${Math.random() * 100}vw`;
-            heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
-            ambientHeartsContainer.appendChild(heart);
-            heart.addEventListener('animationend', () => {
-                heart.remove();
-                createSingleHeart();
-            });
-        }
+        var currentSubjectKey = "";
+        var currentSubjectTitle = "";
+        var currentChapterName = "";
+        var quizQuestions = [];
+        var activeIdx = 0;
+        var totalScore = 0;
+        var studentNameVal = "";
+        var timerInterval;
 
-        // Helper: Trigger massive explosion of emojis
-        function triggerCelebration() {
-            const emojis = ['🥰', '💖', '🎉', '😍', '✨', '❤️'];
-            const burstCount = 80;
-
-            for (let i = 0; i < burstCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'celebration-heart text-3xl';
-                particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-                
-                // Start from center
-                particle.style.left = '50%';
-                particle.style.top = '50%';
-                
-                // Random translation distances
-                const tx = (Math.random() - 0.5) * 500;
-                const ty = (Math.random() - 0.5) * 500;
-                
-                particle.style.setProperty('--tx', `${tx}px`);
-                particle.style.setProperty('--ty', `${ty}px`);
-                
-                document.body.appendChild(particle);
-
-                // Clean up after animation
-                setTimeout(() => {
-                    particle.remove();
-                }, 1500);
+        function showChapters(subjKey) {
+            var nameInput = document.getElementById("txtName").value.trim();
+            if (nameInput === "") {
+                customAlert("कृपया टेस्ट शुरू करने से पहले अपना नाम दर्ज करें!");
+                return;
             }
             
-            // Speed up ambient hearts
-            document.querySelectorAll('.heart-bg').forEach(h => {
-                h.style.animationDuration = '2s';
-            });
+            studentNameVal = nameInput;
+            currentSubjectKey = subjKey;
+            currentSubjectTitle = syllabusData[subjKey].title;
+            var chapters = syllabusData[subjKey].chapters;
+
+            document.getElementById("screenLogin").style.display = "none";
+            document.getElementById("screenChapters").style.display = "block";
+            document.getElementById("chapterScreenTitle").innerText = currentSubjectTitle;
+
+            var chapterHtml = "";
+            for(var i=0; i<chapters.length; i++) {
+                var qCount = chapters[i].questions.length;
+                var btnText = chapters[i].name + (qCount > 0 ? " ("+qCount+" Qs)" : " (जल्द आ रहा है)");
+                var disableAttr = qCount === 0 ? "disabled style='opacity:0.6; cursor:not-allowed;'" : "";
+                chapterHtml += `<button class="btn-chapter" ${disableAttr} onclick="startQuiz(${i})">${btnText}</button>`;
+            }
+            document.getElementById("chapterList").innerHTML = chapterHtml;
+        }
+
+        function goBackToSubjects() {
+            document.getElementById("screenChapters").style.display = "none";
+            document.getElementById("screenLogin").style.display = "block";
+        }
+
+        function startQuiz(chapterIndex) {
+            var chapterData = syllabusData[currentSubjectKey].chapters[chapterIndex];
+            quizQuestions = chapterData.questions;
+            currentChapterName = chapterData.name;
+
+            document.getElementById("screenChapters").style.display = "none";
+            document.getElementById("screenQuiz").style.display = "block";
+            
+            document.getElementById("quizChapterTitle").innerText = currentSubjectTitle + " ➔ " + currentChapterName;
+
+            activeIdx = 0;
+            totalScore = 0;
+            startTimer();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (activeIdx >= quizQuestions.length) {
+                showResult();
+                return;
+            }
+
+            var qData = quizQuestions[activeIdx];
+            var totalQ = quizQuestions.length;
+
+            document.getElementById("txtQIndex").innerText = "प्रश्न: " + (activeIdx + 1) + " / " + totalQ;
+            document.getElementById("barProgress").style.width = ((activeIdx / totalQ) * 100) + "%";
+            document.getElementById("txtQuestion").innerText = qData.q;
+
+            var optionsHtml = "";
+            for (var i = 0; i < qData.o.length; i++) {
+                optionsHtml += '<button class="opt-btn" onclick="checkAnswer(' + i + ', ' + qData.a + ', this)">' + qData.o[i] + '</button>';
+            }
+            document.getElementById("boxOptions").innerHTML = optionsHtml;
+        }
+
+        function checkAnswer(selectedIdx, correctIdx, btnElement) {
+            var allBtns = document.getElementById("boxOptions").getElementsByTagName("button");
+            
+            for (var i = 0; i < allBtns.length; i++) {
+                allBtns[i].disabled = true;
+                if (i === correctIdx) {
+                    allBtns[i].classList.add("correct");
+                }
+            }
+
+            if (selectedIdx === correctIdx) {
+                totalScore++;
+            } else {
+                btnElement.classList.add("wrong");
+            }
+
+            setTimeout(function() {
+                activeIdx++;
+                loadQuestion();
+            }, 1000);
+        }
+
+        function showResult() {
+            clearInterval(timerInterval);
+            document.getElementById("screenQuiz").style.display = "none";
+            document.getElementById("screenResult").style.display = "block";
+
+            var totalQ = quizQuestions.length;
+            var percent = totalQ > 0 ? Math.round((totalScore / totalQ) * 100) : 0;
+            var today = new Date().toLocaleDateString('en-IN');
+
+            document.getElementById("txtScore").innerText = totalScore + " / " + totalQ;
+            document.getElementById("resName").innerText = studentNameVal;
+            document.getElementById("resSubject").innerText = currentSubjectTitle;
+            document.getElementById("resChapter").innerText = currentChapterName;
+            document.getElementById("resDate").innerText = today;
+            document.getElementById("resPercent").innerText = percent;
+            
+            document.getElementById("barProgress").style.width = "100%";
+        }
+
+        function startTimer() {
+            var totalSeconds = 50 * 60; 
+            var timerDisplay = document.getElementById("txtTimer");
+            
+            timerInterval = setInterval(function() {
+                var minutes = Math.floor(totalSeconds / 60);
+                var seconds = totalSeconds % 60;
+                
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                
+                timerDisplay.innerText = minutes + ":" + seconds;
+                
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    customAlert("समय समाप्त! आपका टेस्ट आटोमेटिक सबमिट हो रहा है।");
+                    showResult();
+                } else {
+                    totalSeconds--;
+                }
+            }, 1000);
         }
     </script>
 </body>
